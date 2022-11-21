@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  0002000c  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00009364  00000000  00000000  0002003c  2**0
+ 12 .debug_info   00009356  00000000  00000000  0002003c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00001800  00000000  00000000  000293a0  2**0
+ 13 .debug_abbrev 00001800  00000000  00000000  00029392  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00000748  00000000  00000000  0002aba0  2**3
+ 14 .debug_aranges 00000748  00000000  00000000  0002ab98  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 000006c0  00000000  00000000  0002b2e8  2**3
+ 15 .debug_ranges 000006c0  00000000  00000000  0002b2e0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  00020cc5  00000000  00000000  0002b9a8  2**0
+ 16 .debug_macro  00020317  00000000  00000000  0002b9a0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   000099a5  00000000  00000000  0004c66d  2**0
+ 17 .debug_line   0000983f  00000000  00000000  0004bcb7  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    000c7cac  00000000  00000000  00056012  2**0
+ 18 .debug_str    000c4682  00000000  00000000  000554f6  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  0011dcbe  2**0
+ 19 .comment      00000050  00000000  00000000  00119b78  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00001cdc  00000000  00000000  0011dd10  2**2
+ 20 .debug_frame  00001cdc  00000000  00000000  00119bc8  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -930,10 +930,10 @@ int main(void)
  8000914:	f000 f8a8 	bl	8000a68 <MX_DMA_Init>
   MX_USART2_UART_Init();
  8000918:	f000 f87c 	bl	8000a14 <MX_USART2_UART_Init>
-  /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
+
     /* USER CODE BEGIN 3 */
 	HAL_UART_Receive_DMA(&huart2, &buf, 1);
  800091c:	2201      	movs	r2, #1
@@ -1108,9 +1108,9 @@ static void MX_USART2_UART_Init(void)
  8000a18:	4b11      	ldr	r3, [pc, #68]	; (8000a60 <MX_USART2_UART_Init+0x4c>)
  8000a1a:	4a12      	ldr	r2, [pc, #72]	; (8000a64 <MX_USART2_UART_Init+0x50>)
  8000a1c:	601a      	str	r2, [r3, #0]
-  huart2.Init.BaudRate = 115200;
+  huart2.Init.BaudRate = 19200;
  8000a1e:	4b10      	ldr	r3, [pc, #64]	; (8000a60 <MX_USART2_UART_Init+0x4c>)
- 8000a20:	f44f 32e1 	mov.w	r2, #115200	; 0x1c200
+ 8000a20:	f44f 4296 	mov.w	r2, #19200	; 0x4b00
  8000a24:	605a      	str	r2, [r3, #4]
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
  8000a26:	4b0e      	ldr	r3, [pc, #56]	; (8000a60 <MX_USART2_UART_Init+0x4c>)

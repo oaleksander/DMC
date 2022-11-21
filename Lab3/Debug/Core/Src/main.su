@@ -1,9 +1,9 @@
-../Core/Src/main.c:122:6:light_sticks	24	static
-../Core/Src/main.c:133:6:light_position	16	static
-../Core/Src/main.c:144:6:light_digit	32	static
-../Core/Src/main.c:185:6:light_number	16	static
-../Core/Src/main.c:200:6:HAL_UART_RxCpltCallback	16	static
-../Core/Src/main.c:220:5:main	8	static
+../Core/Src/main.c:121:6:light_sticks	24	static
+../Core/Src/main.c:132:6:light_position	16	static
+../Core/Src/main.c:143:6:light_digit	32	static
+../Core/Src/main.c:184:6:light_number	16	static
+../Core/Src/main.c:199:6:HAL_UART_RxCpltCallback	16	static
+../Core/Src/main.c:219:5:main	8	static
 ../Core/Src/main.c:266:6:SystemClock_Config	88	static
 ../Core/Src/main.c:314:13:MX_USART2_UART_Init	8	static
 ../Core/Src/main.c:345:13:MX_DMA_Init	16	static
