@@ -22,6 +22,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include <math.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -118,7 +120,7 @@ static void MX_USART2_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void light_sticks(int a, int b, int c, int d, int e, int f, int g) {
+void light_sticks(int a, int b, int c, int d, int e, int f, int g, int h) {
 	HAL_GPIO_WritePin(A_PORT, A_PIN, a ? GPIO_PIN_RESET : GPIO_PIN_SET);
 	HAL_GPIO_WritePin(B_PORT, B_PIN, b ? GPIO_PIN_RESET : GPIO_PIN_SET);
 	HAL_GPIO_WritePin(C_PORT, C_PIN, c ? GPIO_PIN_RESET : GPIO_PIN_SET);
@@ -126,7 +128,7 @@ void light_sticks(int a, int b, int c, int d, int e, int f, int g) {
 	HAL_GPIO_WritePin(E_PORT, E_PIN, e ? GPIO_PIN_RESET : GPIO_PIN_SET);
 	HAL_GPIO_WritePin(F_PORT, F_PIN, f ? GPIO_PIN_RESET : GPIO_PIN_SET);
 	HAL_GPIO_WritePin(G_PORT, G_PIN, g ? GPIO_PIN_RESET : GPIO_PIN_SET);
-	HAL_GPIO_WritePin(DP_PORT, DP_PIN, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(DP_PORT, DP_PIN, h ? GPIO_PIN_RESET : GPIO_PIN_SET);
 }
 
 void light_position(int position) {
@@ -145,37 +147,37 @@ void light_digit(int position, int digit) {
 	light_position(position);
 	switch (digit) {
 	case 0:
-		light_sticks(1, 1, 1, 1, 1, 1, 0);
+		light_sticks(1, 1, 1, 1, 1, 1, 0, 0);
 		break;
 	case 1:
-		light_sticks(0, 1, 1, 0, 0, 0, 0);
+		light_sticks(0, 1, 1, 0, 0, 0, 0, 0);
 		break;
 	case 2:
-		light_sticks(1, 1, 0, 1, 1, 0, 1);
+		light_sticks(1, 1, 0, 1, 1, 0, 1, 0);
 		break;
 	case 3:
-		light_sticks(1, 1, 1, 1, 0, 0, 1);
+		light_sticks(1, 1, 1, 1, 0, 0, 1, 0);
 		break;
 	case 4:
-		light_sticks(0, 1, 1, 0, 0, 1, 1);
+		light_sticks(0, 1, 1, 0, 0, 1, 1, 0);
 		break;
 	case 5:
-		light_sticks(1, 0, 1, 1, 0, 1, 1);
+		light_sticks(1, 0, 1, 1, 0, 1, 1, 0);
 		break;
 	case 6:
-		light_sticks(1, 0, 1, 1, 1, 1, 1);
+		light_sticks(1, 0, 1, 1, 1, 1, 1, 0);
 		break;
 	case 7:
-		light_sticks(1, 1, 1, 0, 0, 0, 0);
+		light_sticks(1, 1, 1, 0, 0, 0, 0, 0);
 		break;
 	case 8:
-		light_sticks(1, 1, 1, 1, 1, 1, 1);
+		light_sticks(1, 1, 1, 1, 1, 1, 1, 0);
 		break;
 	case 9:
-		light_sticks(1, 1, 1, 1, 0, 1, 1);
+		light_sticks(1, 1, 1, 1, 0, 1, 1, 0);
 		break;
 	default:
-		light_sticks(0, 0, 0, 0, 0, 0, 0);
+		light_sticks(0, 0, 0, 0, 0, 0, 0, 0);
 		break;
 	}
 
@@ -189,6 +191,23 @@ void light_number(int* number) {
 	light_digit(3, (*number / 100) % 10);
 	HAL_Delay(1);
 	light_digit(4, (*number / 1000) % 10);
+	HAL_Delay(1);
+}
+
+void light_number_sin(int* number) {
+	float sin_number = (float)sin((double)*number);
+
+	light_digit(1, (int)floor(fabs(sin_number) * 100.0) % 10);
+	HAL_Delay(1);
+	light_digit(2, (int)floor(fabs(sin_number) * 10.0) % 10);
+	HAL_Delay(1);
+	if (fabs(sin_number) == 1) {
+		light_position(3); light_sticks(0, 1, 1, 0, 0, 0, 0, 1);
+	} else {
+		light_position(3); light_sticks(1, 1, 1, 1, 1, 1, 0, 1);
+	}
+	HAL_Delay(1);
+	light_position(4); light_sticks(0, 0, 0, 0, 0, 0, sin_number < .0, 0);
 	HAL_Delay(1);
 }
 
@@ -254,7 +273,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	HAL_UART_Receive_DMA(&huart2, &buf, 1);
-	light_number(&number);
+	light_number_sin(&number);
   }
   /* USER CODE END 3 */
 }
