@@ -60,8 +60,8 @@ all: main-build
 main-build: Lab3.elf secondary-outputs
 
 # Tool invocations
-Lab3.elf Lab3.map: $(OBJS) $(USER_OBJS) C:\Users\User\OneDrive\ -\ ITMO\ UNIVERSITY\DMC\Lab3\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Lab3.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\User\OneDrive - ITMO UNIVERSITY\DMC\Lab3\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Lab3.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Lab3.elf Lab3.map: $(OBJS) $(USER_OBJS) D:\dev\STM\DMC\Lab3\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Lab3.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\dev\STM\DMC\Lab3\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Lab3.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -190,30 +190,25 @@ void light_number(int* number) {
 	light_digit(3, (*number / 100) % 10);
 	HAL_Delay(1);
 	light_digit(4, (*number / 1000) % 10);
+	HAL_Delay(1);
 }
 
-uint8_t buf[4] = {0};
+unsigned char buf = 0;
+char strbuf[2] = {0};
 uint8_t is_receiving_number = 0;
-uint8_t digit_cnt = 0;
 int number = 0;
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-	buf[3] = '\0';
-	number = atoi(&buf[1]);
-	return;
-	if (buf[0] == 'b') {
+	if (buf == 'b') {
 		number = 0;
-		digit_cnt = 0;
 		is_receiving_number = 1;
 		return;
 	}
-	if (buf[0] == 'e') {
+	if (buf == 'e') {
 		is_receiving_number = 0;
 		return;
 	}
 	if (is_receiving_number) {
-		// number += atoi(buf[0]) * pow(10, digit_cnt);
-		number = digit_cnt;
-		digit_cnt++;
+		number = number * 10 + (buf - '0');
 	}
 }
 /* USER CODE END 0 */
@@ -258,11 +253,8 @@ int main(void)
   {
     /* USER CODE END WHILE */
     /* USER CODE BEGIN 3 */
-	  while (1) {
-		    HAL_UART_Receive_DMA(&huart2, buf, 4);
-		    light_number(&number);
-	  }
-
+	HAL_UART_Receive_DMA(&huart2, &buf, 1);
+	light_number(&number);
   }
   /* USER CODE END 3 */
 }
