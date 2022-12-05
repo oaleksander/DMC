@@ -24,6 +24,7 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <string.h>
 
 /* USER CODE END Includes */
 
@@ -81,6 +82,7 @@
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart2;
 DMA_HandleTypeDef hdma_usart2_rx;
+DMA_HandleTypeDef hdma_usart2_tx;
 
 /* USER CODE BEGIN PV */
 
@@ -213,7 +215,7 @@ void light_number_sin(int* number) {
 }
 
 unsigned char buf = 0;
-char strbuf[2] = {0};
+char sendbuf[16] = {0};
 uint8_t is_receiving_number = 0;
 int number = 0;
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
@@ -223,9 +225,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 		return;
 	}
 	if (buf == 'e') {
-		char sendbuf[5] = {0};
-		sprintf(sendbuf, "%.2f", sin(number));
-		HAL_UART_Transmit_DMA(&huart2, (uint8_t*)sendbuf, sizeof(sendbuf));
+		HAL_UART_AbortTransmit(&huart2);
+		memset(sendbuf, 0, sizeof(sendbuf));
+		sprintf(sendbuf, "%.2f\n", sin(number));
+		HAL_UART_Transmit_DMA(&huart2, (uint8_t*)sendbuf, strlen(sendbuf));
 		is_receiving_number = 0;
 		return;
 	}
@@ -304,8 +307,8 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = 16;
-  RCC_OscInitStruct.PLL.PLLN = 192;
+  RCC_OscInitStruct.PLL.PLLM = 8;
+  RCC_OscInitStruct.PLL.PLLN = 50;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 2;
   RCC_OscInitStruct.PLL.PLLR = 2;
@@ -320,10 +323,10 @@ void SystemClock_Config(void)
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLRCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -375,6 +378,9 @@ static void MX_DMA_Init(void)
   /* DMA1_Stream5_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
+  /* DMA1_Stream6_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
 
 }
 
