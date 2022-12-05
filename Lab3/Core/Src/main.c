@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 
 #include <math.h>
+#include <stdio.h>
 
 /* USER CODE END Includes */
 
@@ -222,6 +223,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 		return;
 	}
 	if (buf == 'e') {
+		char sendbuf[5] = {0};
+		sprintf(sendbuf, "%.2f", sin(number));
+		HAL_UART_Transmit_DMA(&huart2, (uint8_t*)sendbuf, sizeof(sendbuf));
 		is_receiving_number = 0;
 		return;
 	}
